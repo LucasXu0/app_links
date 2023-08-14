@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:app_links/src/app_links_linux.dart';
+import 'package:flutter/foundation.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:app_links/src/app_links_method_channel.dart';
 
@@ -23,11 +27,18 @@ abstract class AppLinksPlatform extends PlatformInterface {
   AppLinksPlatform() : super(token: _token);
 
   static AppLinksPlatform _instance = AppLinksMethodChannel();
+  static final AppLinksPlatform _linuxInstance = AppLinkPluginLinux();
 
   /// The default instance of [AppLinksPlatform] to use.
   ///
   /// Defaults to [AppLinksMethodChannel].
-  static AppLinksPlatform get instance => _instance;
+  static AppLinksPlatform get instance {
+    if (!kIsWeb && Platform.isLinux) {
+      return _linuxInstance;
+    }
+
+    return _instance;
+  }
 
   /// Platform-specific plugins should set this to an instance of their own
   /// platform-specific class that extends [AppLinksPlatform] when they register
@@ -36,6 +47,13 @@ abstract class AppLinksPlatform extends PlatformInterface {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
+
+  /// Register the DBus Object ID for the app.
+  /// Only works for Linux.
+  Future<void> registerDBusService(String objectId, String interfaceId) =>
+      throw UnimplementedError(
+        'registerDBusServiceId() not implemented on the current platform.',
+      );
 
   /// Gets the initial / first link
   /// returns [Uri] or [null]
