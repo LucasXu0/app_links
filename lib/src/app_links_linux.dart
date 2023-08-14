@@ -6,13 +6,14 @@ import 'package:app_links/src/app_links_platform_interface.dart';
 
 class AppLinkPluginLinux extends AppLinksPlatform {
   final _client = DBusClient.session();
-  DBusInterfaceObject? _object;
   final StreamController<String> _controller = StreamController<String>();
   final List<String> _uris = [];
 
+  DBusInterfaceObject? _object;
+
   @override
-  void registerDBusService(String objectId, String interfaceId) {
-    print('registerDBusService: $objectId, $interfaceId');
+  Future<void> registerDBusService(String objectId, String interfaceId) async {
+    // Unregister object if needed
     if (_object != null) {
       _client.unregisterObject(_object!);
       _object = null;
@@ -22,22 +23,21 @@ class AppLinkPluginLinux extends AppLinksPlatform {
       objectId: objectId,
       interfaceId: interfaceId,
       onOpen: (uris, platformData) async {
-        print('on open $uris');
         _uris
           ..clear()
           ..addAll(uris);
-
         if (uris.isNotEmpty) {
           _controller.add(uris.last);
         }
       },
     );
-    _client.requestName(interfaceId, flags: {
+
+    await _client.requestName(interfaceId, flags: {
       DBusRequestNameFlag.replaceExisting,
       DBusRequestNameFlag.allowReplacement,
-    }).then((value) {
-      _client.registerObject(_object!);
     });
+
+    _client.registerObject(_object!);
   }
 
   @override

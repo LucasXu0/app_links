@@ -6,7 +6,7 @@ import 'package:dbus/dbus.dart';
 class DBusInterfaceObject extends DBusObject {
   /// Creates a new object to expose on [path].
   DBusInterfaceObject({
-    // It should be compatible with the node name in dbus-interface.xml
+    // It should be compatible with the node name in DBus-interface.xml
     required String objectId,
     required this.interfaceId,
     this.onOpen,
@@ -25,7 +25,7 @@ class DBusInterfaceObject extends DBusObject {
     Map<String, DBusValue> platformData,
   )? onActivateAction;
 
-  /// The format should be xxx.yyy.zzz, which is compatible with the interface name dbus-interface.xml
+  /// The format should be xxx.yyy.zzz, which is compatible with the interface name DBus-interface.xml
   final String interfaceId;
 
   /// Implementation of com.example.FlutterApp.Activate()
@@ -97,9 +97,6 @@ class DBusInterfaceObject extends DBusObject {
 
   @override
   Future<DBusMethodResponse> handleMethodCall(DBusMethodCall methodCall) async {
-    print(
-      'receive method call ${methodCall.name}, ${methodCall.signature}, ${methodCall.values}',
-    );
     if (methodCall.interface == interfaceId) {
       if (methodCall.name == 'Activate') {
         if (methodCall.signature != DBusSignature('a{sv}')) {

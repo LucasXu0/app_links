@@ -47,7 +47,7 @@ class AppLinks extends AppLinksPlatform {
   }
 
   @override
-  void registerDBusService(String objectId, String interfaceId) {
+  Future<void> registerDBusService(String objectId, String interfaceId) {
     return AppLinksPlatform.instance.registerDBusService(objectId, interfaceId);
   }
 }
