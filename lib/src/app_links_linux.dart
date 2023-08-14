@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app_links/src/linux/dbus_interface.dart';
+import 'package:app_links/src/dbus_interface.dart';
 import 'package:dbus/dbus.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:app_links/src/app_links_platform_interface.dart';

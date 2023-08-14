@@ -45,5 +45,4 @@ flutter:
       macos:
         pluginClass: AppLinksMacosPlugin
       linux:
-        pluginClass: AppLinksPluginLinux
-        fileName: src/app_links_linux.dart
+        dartPluginClass: AppLinksPluginLinux
