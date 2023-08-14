@@ -37,6 +37,13 @@ abstract class AppLinksPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  /// Register the DBus Object ID for the app.
+  /// Only works for Linux.
+  void registerDBusService(String objectId, String interfaceId) =>
+      throw UnimplementedError(
+        'registerDBusServiceId() not implemented on the current platform.',
+      );
+
   /// Gets the initial / first link
   /// returns [Uri] or [null]
   Future<Uri?> getInitialAppLink() => throw UnimplementedError(
