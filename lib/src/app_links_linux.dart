@@ -12,6 +12,7 @@ class AppLinkPluginLinux extends AppLinksPlatform {
 
   @override
   void registerDBusService(String objectId, String interfaceId) {
+    print('registerDBusService: $objectId, $interfaceId');
     if (_object != null) {
       _client.unregisterObject(_object!);
       _object = null;
@@ -21,6 +22,7 @@ class AppLinkPluginLinux extends AppLinksPlatform {
       objectId: objectId,
       interfaceId: interfaceId,
       onOpen: (uris, platformData) async {
+        print('on open $uris');
         _uris
           ..clear()
           ..addAll(uris);
@@ -67,4 +69,10 @@ class AppLinkPluginLinux extends AppLinksPlatform {
 
   @override
   Stream<Uri> get uriLinkStream => _controller.stream.map(Uri.parse);
+
+  @override
+  Stream<String> get allStringLinkStream => _controller.stream;
+
+  @override
+  Stream<Uri> get allUriLinkStream => _controller.stream.map(Uri.parse);
 }
