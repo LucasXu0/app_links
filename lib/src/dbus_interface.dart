@@ -97,6 +97,9 @@ class DBusInterfaceObject extends DBusObject {
 
   @override
   Future<DBusMethodResponse> handleMethodCall(DBusMethodCall methodCall) async {
+    print(
+      'receive method call ${methodCall.name}, ${methodCall.signature}, ${methodCall.values}',
+    );
     if (methodCall.interface == interfaceId) {
       if (methodCall.name == 'Activate') {
         if (methodCall.signature != DBusSignature('a{sv}')) {

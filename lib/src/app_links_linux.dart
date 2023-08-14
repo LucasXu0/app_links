@@ -30,9 +30,12 @@ class AppLinkPluginLinux extends AppLinksPlatform {
         }
       },
     );
-    _client
-      ..requestName(interfaceId)
-      ..registerObject(_object!);
+    _client.requestName(interfaceId, flags: {
+      DBusRequestNameFlag.replaceExisting,
+      DBusRequestNameFlag.allowReplacement,
+    }).then((value) {
+      _client.registerObject(_object!);
+    });
   }
 
   @override
