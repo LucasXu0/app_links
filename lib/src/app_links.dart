@@ -45,4 +45,9 @@ class AppLinks extends AppLinksPlatform {
   Stream<Uri> get allUriLinkStream {
     return AppLinksPlatform.instance.allUriLinkStream;
   }
+
+  @override
+  void registerDBusService(String objectId, String interfaceId) {
+    return AppLinksPlatform.instance.registerDBusService(objectId, interfaceId);
+  }
 }
