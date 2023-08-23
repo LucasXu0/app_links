@@ -16,12 +16,12 @@ dependencies:
 
   flutter_web_plugins:
     sdk: flutter
-  dbus: ^0.7.8
   url_protocol:
     git:
       url: https://github.com/LucasXu0/flutter_url_protocol
       ref: 77a8420
   universal_io: ^2.2.2
+  gtk: ^2.1.0
 
 dev_dependencies:
   flutter_test:

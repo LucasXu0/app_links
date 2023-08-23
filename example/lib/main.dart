@@ -45,9 +45,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   late AppLinks _appLinks;
   StreamSubscription<Uri>? _linkSubscription;
+  Uri? _lastUri;
 
   @override
   void initState() {
@@ -75,12 +76,19 @@ class _MyAppState extends State<MyApp> {
 
     // Handle link when app is in warm state (front or background)
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      setState(() {
+        _navigatorKey = GlobalKey<NavigatorState>();
+        _lastUri = uri;
+      });
       print('onAppLink: $uri');
       openAppLink(uri);
     });
   }
 
   void openAppLink(Uri uri) {
+    if (Platform.isLinux) {
+      return;
+    }
     _navigatorKey.currentState?.pushNamed(uri.fragment);
   }
 
@@ -133,6 +141,10 @@ class _MyAppState extends State<MyApp> {
 
             This example code triggers new page from URL fragment.
             '''),
+            if (_lastUri != null) ...[
+              const SizedBox(height: 20),
+              SelectableText('Received links: $_lastUri!'),
+            ],
             const SizedBox(height: 20),
             buildWindowsUnregisterBtn(),
           ],

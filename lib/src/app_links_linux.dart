@@ -1,44 +1,26 @@
 import 'dart:async';
 
-import 'package:app_links/src/dbus_interface.dart';
-import 'package:dbus/dbus.dart';
+import 'package:flutter/widgets.dart';
+import 'package:gtk/gtk.dart';
 import 'package:app_links/src/app_links_platform_interface.dart';
 
 class AppLinkPluginLinux extends AppLinksPlatform {
-  final _client = DBusClient.session();
+  AppLinkPluginLinux() {
+    _notifier = GtkApplicationNotifier()
+      ..addCommandLineListener((args) {
+        if (args.isEmpty) {
+          return;
+        }
+        final uri = args.first;
+        debugPrint(uri);
+        _uris.add(uri);
+        _controller.add(uri);
+      });
+  }
+
   final StreamController<String> _controller = StreamController<String>();
   final List<String> _uris = [];
-
-  DBusInterfaceObject? _object;
-
-  @override
-  Future<void> registerDBusService(String objectId, String interfaceId) async {
-    // Unregister object if needed
-    if (_object != null) {
-      _client.unregisterObject(_object!);
-      _object = null;
-    }
-
-    _object = DBusInterfaceObject(
-      objectId: objectId,
-      interfaceId: interfaceId,
-      onOpen: (uris, platformData) async {
-        _uris
-          ..clear()
-          ..addAll(uris);
-        if (uris.isNotEmpty) {
-          _controller.add(uris.last);
-        }
-      },
-    );
-
-    await _client.requestName(interfaceId, flags: {
-      DBusRequestNameFlag.replaceExisting,
-      DBusRequestNameFlag.allowReplacement,
-    });
-
-    _client.registerObject(_object!);
-  }
+  late final GtkApplicationNotifier _notifier;
 
   @override
   Future<Uri?> getInitialAppLink() async {

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Flutter App
+Exec=example %U
+Terminal=false
+StartupWMClass=example
+MimeType=x-scheme-handler/linux-deeplink-example;
